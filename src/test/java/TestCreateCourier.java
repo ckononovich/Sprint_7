@@ -11,7 +11,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 
 public class TestCreateCourier {
 
-    private String login = "User1";
+    private String login = "User2";
     private String password = "5555";
     private String firstName = "New";
     CourierData courierData = new CourierData(login, password, firstName);
@@ -21,12 +21,14 @@ public class TestCreateCourier {
         RestAssured.baseURI = "https://qa-scooter.praktikum-services.ru/";
     }
 
+
     @Test
 
     @DisplayName("Create a new courier")
     @Description("Checking creation of a new courier is important")
 
     public void createNewCourier(){
+
         Response response = createCourier();
         checkResponse(response, 201,true);
         printResponseBodyToConsole(response);
@@ -82,8 +84,8 @@ public class TestCreateCourier {
     @Step ("Send post request with some empty values")
 
     public Response sendPostRequestWithoutSomeFields(){
-        CourierData courierData1 = new CourierData("","",firstName);
-        Response response = given().header("Content-type", "application/json").and().body(courierData1).when().post("/api/v1/courier");
+        CourierData courierDataNew = new CourierData("","",firstName);
+        Response response = given().header("Content-type", "application/json").and().body(courierDataNew).when().post("/api/v1/courier");
         return response;
     }
 
