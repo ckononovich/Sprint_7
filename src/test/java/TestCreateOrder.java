@@ -1,11 +1,9 @@
-import io.qameta.allure.Step;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import static io.restassured.RestAssured.given;
 
 @RunWith(Parameterized.class)
 public class TestCreateOrder {
@@ -45,33 +43,17 @@ public class TestCreateOrder {
 
     @Before
     public void setUp() {
-        RestAssured.baseURI = "https://qa-scooter.praktikum-services.ru/";
+       RestAssured.baseURI = "https://qa-scooter.praktikum-services.ru/";
+       // RestAssured.baseURI = String.valueOf(BaseHttpClient.baseRequestSpec());
     }
 
-    Order order = new Order(firstName, lastName,address, metroStation, phone, rentTime, deliveryDate,comment,color);
-
-    @Step("Create an order")
-
-    public Response createNewOrder(){
-        Response response = given().header("Content-type", "application/json").and().body(order).post("/api/v1/orders");
-        return response;
-    }
-    @Step ("Check response")
-
-    public void checkResponse(Response response, int code){
-        response.then().statusCode(code);
-    }
-
-    @Step ("Print response body to console")
-    public void printResponseBodyToConsole(Response response){
-        System.out.println(response.body().asString());
-    }
+    Steps steps = new Steps();
 
     @Test
     public void createOrder(){
-        Response response = createNewOrder();
-        checkResponse(response,201);
-        printResponseBodyToConsole(response);
+        Response response = steps.createNewOrder();
+        steps.checkResponse(response,201);
+        steps.printResponseBodyToConsole(response);
     }
 
 }
