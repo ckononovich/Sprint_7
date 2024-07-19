@@ -8,7 +8,7 @@ public class Steps {
 
     @Step("Send post request in order to create a new courier")
     public Response createCourier(){
-        Response response = given().header("Content-type", "application/json").and().body(dataForTests.courierData).when().post("/api/v1/courier");
+        Response response = given().spec(BaseHttpClient.baseRequestSpec()).and().body(dataForTests.courierData).when().post("/api/v1/courier");
         return response;
     }
 
@@ -29,13 +29,13 @@ public class Steps {
 
     @Step ("Send post request with some empty values")
     public Response sendPostRequestWithoutSomeFields(){
-        Response response = given().header("Content-type", "application/json").and().body(dataForTests.courierDataNew).when().post("/api/v1/courier");
+        Response response = given().spec(BaseHttpClient.baseRequestSpec()).and().body(dataForTests.courierDataNew).when().post("/api/v1/courier");
         return response;
     }
 
     @Step ("Login to the system with correct data")
     public Response loginToTheSystemCorrectData(){
-        Response response = given().header("Content-type", "application/json").and().body(dataForTests.loginCourier).when().post("/api/v1/courier/login");
+        Response response = given().spec(BaseHttpClient.baseRequestSpec()).and().body(dataForTests.loginCourier).when().post("/api/v1/courier/login");
         return response;
     }
 
@@ -46,24 +46,24 @@ public class Steps {
 
     @Step ("Login to the system with wrong login")
     public Response loginToTheSystemWithWrongLogin(){
-        Response response = given().header("Content-type", "application/json").and().body(dataForTests.loginWithWrongLogin).when().post("/api/v1/courier/login");
+        Response response = given().spec(BaseHttpClient.baseRequestSpec()).and().body(dataForTests.loginWithWrongLogin).when().post("/api/v1/courier/login");
         return response;
     }
 
-    @Step ("Login to the system with wrong login")
+    @Step ("Login to the system with wrong Password")
     public Response loginToTheSystemWithWrongPassword(){
-        Response response = given().header("Content-type", "application/json").and().body(dataForTests.loginWithWrongPassword).when().post("/api/v1/courier/login");
+        Response response = given().spec(BaseHttpClient.baseRequestSpec()).and().body(dataForTests.loginWithWrongPassword).when().post("/api/v1/courier/login");
         return response;
     }
 
     @Step ("Login to the system with empty data")
     public Response loginToTheSystemWithEmptyData(){
-        Response response = given().header("Content-type", "application/json").and().body(dataForTests.loginWithEmptyData).when().post("/api/v1/courier/login");
+        Response response = given().spec(BaseHttpClient.baseRequestSpec()).and().body(dataForTests.loginWithEmptyData).when().post("/api/v1/courier/login");
         return response;
     }
     @Step("Get all orders")
     public Response allOrders(){
-        Response response = given().get("/api/v1/orders");
+        Response response = given().spec(BaseHttpClient.baseRequestSpec()).get("/api/v1/orders");
         return response;
     }
 
@@ -75,17 +75,12 @@ public class Steps {
     @Step("Create an order")
 
     public Response createNewOrder(){
-        Response response = given().header("Content-type", "application/json").and().body(TestCreateOrder.getFieldsForOrder()).post("/api/v1/orders");
+        Response response = given().spec(BaseHttpClient.baseRequestSpec()).and().body(TestCreateOrder.getFieldsForOrder()).post("/api/v1/orders");
         return response;
     }
-
-    public Response loginCourier(){
-        Response response = given().header("Content-type", "application/json").and().body(dataForTests.loginCourier).when().post("/api/v1/courier/login");
-        return response;
-    }
-
+    @Step("Delete courier")
     public Response deleteCourier(String id){
-        Response deleteCourier = given().header("Content-type", "application/json").when().delete("/api/v1/courier/"+id);
+        Response deleteCourier = given().spec(BaseHttpClient.baseRequestSpec()).when().delete("/api/v1/courier/"+id);
         return deleteCourier;
     }
 }

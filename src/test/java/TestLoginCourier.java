@@ -1,6 +1,5 @@
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
@@ -8,18 +7,17 @@ import org.junit.Test;
 
 public class TestLoginCourier {
 
-    Steps steps = new Steps();
-
     @Before
-    public void setUp() {
-        RestAssured.baseURI = "https://qa-scooter.praktikum-services.ru/";
+    public void createACourier(){
+        Response createUser = steps.createCourier();
     }
+
+    Steps steps = new Steps();
 
     @Test
     @DisplayName("Login to the system")
-    @Description("Smoke test")
+    @Description("Testing login with correct data")
     public void loginToTheSystem(){
-        Response createUser = steps.createCourier();
         Response login = steps.loginToTheSystemCorrectData();
         int id = login.getBody().path("id");
         steps.checkResponseFromServer(login, 200, id);
@@ -28,10 +26,9 @@ public class TestLoginCourier {
 
     @Test
     @DisplayName("Login is wrong")
-    @Description("Testing login with wrong data")
+    @Description("Testing login with wrong data for login")
 
     public void loginWithWrongLogin(){
-        Response createUser = steps.createCourier();
         Response login = steps.loginToTheSystemWithWrongLogin();
         steps.compareResponseFromTheServer(login, 404, "Учетная запись не найдена");
         steps.printResponseBodyToConsole(login);
@@ -39,10 +36,9 @@ public class TestLoginCourier {
 
     @Test
     @DisplayName("Password is wrong")
-    @Description("Testing login with wrong data")
+    @Description("Testing login with wrong data for password")
 
     public void loginWithWrongPassword(){
-        Response createUser = steps.createCourier();
         Response login = steps.loginToTheSystemWithWrongPassword();
         steps.compareResponseFromTheServer(login, 404, "Учетная запись не найдена");
         steps.printResponseBodyToConsole(login);
@@ -53,7 +49,6 @@ public class TestLoginCourier {
     @Description("Testing login with empty data")
 
     public void loginWithEmptyData(){
-        Response createUser = steps.createCourier();
         Response login = steps.loginToTheSystemWithEmptyData();
         steps.compareResponseFromTheServer(login, 400, "Недостаточно данных для входа");
         steps.printResponseBodyToConsole(login);
@@ -62,7 +57,7 @@ public class TestLoginCourier {
 
     @After
     public void deleteCourierData(){
-        try {Response response = steps.loginCourier();
+        try {Response response = steps.loginToTheSystemCorrectData();
             String id = response.getBody().path("id").toString();
             Response deleteCourier = steps.deleteCourier(id);
         } catch (Exception exception){System.out.println("Nothing to delete");}

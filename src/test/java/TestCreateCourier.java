@@ -1,19 +1,12 @@
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 public class TestCreateCourier {
 
     Steps steps = new Steps();
-
-    @Before
-    public void setUp() {
-        RestAssured.baseURI = "https://qa-scooter.praktikum-services.ru/";
-    }
 
     @Test
 
@@ -21,7 +14,6 @@ public class TestCreateCourier {
     @Description("Checking creation of a new courier is important")
 
     public void createNewCourier(){
-
         Response response = steps.createCourier();
         steps.checkResponse(response, 201,true);
         steps.printResponseBodyToConsole(response);
@@ -52,7 +44,7 @@ public class TestCreateCourier {
 
     @After
     public void deleteCourierData(){
-        try {Response response = steps.loginCourier();
+        try {Response response = steps.loginToTheSystemCorrectData();
         String id = response.getBody().path("id").toString();
         Response deleteCourier = steps.deleteCourier(id);
         } catch (Exception exception){System.out.println("Nothing to delete");}

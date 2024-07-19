@@ -1,6 +1,6 @@
-import io.restassured.RestAssured;
+import io.qameta.allure.Description;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -41,15 +41,11 @@ public class TestCreateOrder {
         };
     }
 
-    @Before
-    public void setUp() {
-       RestAssured.baseURI = "https://qa-scooter.praktikum-services.ru/";
-       // RestAssured.baseURI = String.valueOf(BaseHttpClient.baseRequestSpec());
-    }
-
     Steps steps = new Steps();
 
     @Test
+    @DisplayName("Create an order")
+    @Description("Create an order with different data for the color")
     public void createOrder(){
         Response response = steps.createNewOrder();
         steps.checkResponse(response,201);
