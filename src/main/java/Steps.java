@@ -75,7 +75,8 @@ public class Steps {
     @Step("Create an order")
 
     public Response createNewOrder(){
-        Response response = given().spec(BaseHttpClient.baseRequestSpec()).and().body(TestCreateOrder.getFieldsForOrder()).post("/api/v1/orders");
+        Object TestCreateOrder = null;
+        Response response = given().spec(BaseHttpClient.baseRequestSpec()).and().body(TestCreateOrder.getClass()).post("/api/v1/orders");
         return response;
     }
     @Step("Delete courier")
