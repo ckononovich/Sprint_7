@@ -7,47 +7,45 @@ import org.junit.Test;
 public class TestCreateCourier {
 
     Steps steps = new Steps();
+    ResponseCode code = new ResponseCode();
+    ResponseMessage responseMessage = new ResponseMessage();
 
     @Test
-
     @DisplayName("Create a new courier")
     @Description("Checking creation of a new courier is important")
-
-    public void createNewCourier(){
+    public void createNewCourier() {
         Response response = steps.createCourier();
-        steps.checkResponse(response, 201,true);
         steps.printResponseBodyToConsole(response);
+        steps.checkResponse(response, code.getSuccessfulCodeCreation(), responseMessage.getTrueCreationOfTheCourier());
     }
 
     @Test
     @DisplayName("Create the courier with the same login")
     @Description("Test negative experience with the same login")
-
-    public void createCourierWithTheSameLogin(){
-
+    public void createCourierWithTheSameLogin() {
         Response createCourier = steps.createCourier();
         Response createTheSameCourier = steps.createCourier();
-        steps.compareResponseFromTheServer(createTheSameCourier, 409,"Этот логин уже используется. Попробуйте другой.");
         steps.printResponseBodyToConsole(createTheSameCourier);
+        steps.compareResponseFromTheServer(createTheSameCourier, code.getConflictCode(), responseMessage.getCourierWithTheSameLogin());
     }
 
     @Test
-
     @DisplayName("Create a new courier with wrong data")
     @Description("Not all required fields are populated")
-
-    public void checkAllRequiredFields(){
+    public void checkAllRequiredFields() {
         Response response = steps.sendPostRequestWithoutSomeFields();
-        steps.compareResponseFromTheServer(response, 400,"Недостаточно данных для создания учетной записи");
         steps.printResponseBodyToConsole(response);
+        steps.compareResponseFromTheServer(response, code.getBadRequestCode(), responseMessage.getNotEnoughData());
     }
 
     @After
-    public void deleteCourierData(){
-        try {Response response = steps.loginToTheSystemCorrectData();
-        String id = response.getBody().path("id").toString();
-        Response deleteCourier = steps.deleteCourier(id);
-        } catch (Exception exception){System.out.println("Nothing to delete");}
+    public void deleteCourierData() {
+        try {
+            Response response = steps.loginToTheSystemCorrectData();
+            String id = response.getBody().path("id").toString();
+            Response deleteCourier = steps.deleteCourier(id);
+        } catch (Exception exception) {
+            System.out.println("Nothing to delete");
+        }
     }
-
-    }
+}

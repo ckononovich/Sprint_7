@@ -6,14 +6,14 @@ import org.junit.Test;
 public class TestListOfOrders {
 
     Steps steps = new Steps();
+    ResponseCode code = new ResponseCode();
 
     @Test
     @DisplayName("Display the list of orders")
     @Description("Testing displaying the whole list of orders")
-    public void getAllOrders(){
+    public void getAllOrders() {
         Response response = steps.allOrders();
-        steps.checkResponse(response,200);
         steps.printResponseBodyToConsole(response);
+        steps.checkResponse(response, code.getSuccessfulCode());
     }
-
 }

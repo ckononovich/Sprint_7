@@ -7,59 +7,61 @@ import org.junit.Test;
 
 public class TestLoginCourier {
 
+    Steps steps = new Steps();
+    ResponseCode code = new ResponseCode();
+    ResponseMessage responseMessage = new ResponseMessage();
+
     @Before
-    public void createACourier(){
+    public void createACourier() {
         Response createUser = steps.createCourier();
     }
-
-    Steps steps = new Steps();
 
     @Test
     @DisplayName("Login to the system")
     @Description("Testing login with correct data")
-    public void loginToTheSystem(){
+    public void loginToTheSystem() {
         Response login = steps.loginToTheSystemCorrectData();
         int id = login.getBody().path("id");
-        steps.checkResponseFromServer(login, 200, id);
         steps.printResponseBodyToConsole(login);
+        steps.checkResponseFromServer(login, code.getSuccessfulCode(), id);
     }
 
     @Test
     @DisplayName("Login is wrong")
     @Description("Testing login with wrong data for login")
-
-    public void loginWithWrongLogin(){
+    public void loginWithWrongLogin() {
         Response login = steps.loginToTheSystemWithWrongLogin();
-        steps.compareResponseFromTheServer(login, 404, "Учетная запись не найдена");
         steps.printResponseBodyToConsole(login);
+        steps.compareResponseFromTheServer(login, code.getNotFoundCode(), responseMessage.getIncorrectDataFortLogin());
     }
 
     @Test
     @DisplayName("Password is wrong")
     @Description("Testing login with wrong data for password")
-
-    public void loginWithWrongPassword(){
+    public void loginWithWrongPassword() {
         Response login = steps.loginToTheSystemWithWrongPassword();
-        steps.compareResponseFromTheServer(login, 404, "Учетная запись не найдена");
         steps.printResponseBodyToConsole(login);
+        steps.compareResponseFromTheServer(login, code.getNotFoundCode(), responseMessage.getIncorrectDataFortLogin());
     }
 
     @Test
     @DisplayName("Password and login are empty")
     @Description("Testing login with empty data")
-
-    public void loginWithEmptyData(){
+    public void loginWithEmptyData() {
         Response login = steps.loginToTheSystemWithEmptyData();
-        steps.compareResponseFromTheServer(login, 400, "Недостаточно данных для входа");
         steps.printResponseBodyToConsole(login);
+        steps.compareResponseFromTheServer(login, code.getBadRequestCode(), responseMessage.getNotEnoughDataForLogin());
     }
 
 
     @After
-    public void deleteCourierData(){
-        try {Response response = steps.loginToTheSystemCorrectData();
+    public void deleteCourierData() {
+        try {
+            Response response = steps.loginToTheSystemCorrectData();
             String id = response.getBody().path("id").toString();
             Response deleteCourier = steps.deleteCourier(id);
-        } catch (Exception exception){System.out.println("Nothing to delete");}
+        } catch (Exception exception) {
+            System.out.println("Nothing to delete");
+        }
     }
 }
